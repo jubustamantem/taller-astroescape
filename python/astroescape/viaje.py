@@ -1,17 +1,8 @@
-import mysql.connector
 from abc import ABC
 from datetime import date
 
 from .destino import Destino
 from .experiencia import Experiencia
-
-# Cada clase abre MySQL por su cuenta. Active Record.
-# Estos datos tienen que coincidir con la conexión de Workbench.
-HOST = "localhost"
-PUERTO = 3306
-USUARIO = "root"
-CONTRASENA = ""
-BASE_DE_DATOS = "astroescape"
 
 
 class Viaje(ABC):
@@ -29,31 +20,6 @@ class Viaje(ABC):
         # Aquí hay una relación
         self._experiencias: list[Experiencia] = []
         destino.agregar_viaje(self)
-
-    @classmethod
-    def _conectar(cls):
-        # La jerarquía abre la conexión.
-        return mysql.connector.connect(
-            host=HOST,
-            port=PUERTO,
-            user=USUARIO,
-            password=CONTRASENA,
-            database=BASE_DE_DATOS,
-        )
-
-    def _guardar_experiencias(self, cursor) -> None:
-        cursor.execute(
-            "DELETE FROM viaje_experiencias WHERE viaje_codigo = %s",
-            (self._codigo,),
-        )
-        for experiencia in self._experiencias:
-            cursor.execute(
-                """
-                INSERT INTO viaje_experiencias (viaje_codigo, experiencia_nombre)
-                VALUES (%s, %s)
-                """,
-                (self._codigo, experiencia.nombre),
-            )
 
     @property
     def codigo(self) -> str:
