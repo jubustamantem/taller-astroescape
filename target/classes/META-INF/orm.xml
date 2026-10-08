@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd"
+                 version="3.1">
+    <persistence-unit-metadata>
+        <persistence-unit-defaults>
+            <access>FIELD</access>
+        </persistence-unit-defaults>
+    </persistence-unit-metadata>
+
+    <!-- Cliente: persisten documento (PK) y nombre. -->
+    <entity class="astroescape.Cliente">
+        <table name="clientes"/>
+        <attributes>
+            <id name="documento">
+                <column name="documento" length="50"/>
+            </id>
+            <basic name="nombre">
+                <column name="nombre" length="150" nullable="false"/>
+            </basic>
+            <one-to-many name="alquileres" mapped-by="cliente" fetch="LAZY"/>
+        </attributes>
+    </entity>
+
+    <!-- TrajeEspacial: persisten codigo (PK), talla y unidadesDisponibles. -->
+    <entity class="astroescape.TrajeEspacial">
+        <table name="trajes"/>
+        <attributes>
+            <id name="codigo">
+                <column name="codigo" length="50"/>
+            </id>
+            <basic name="talla">
+                <column name="talla" length="20" nullable="false"/>
+            </basic>
+            <basic name="unidadesDisponibles">
+                <column name="unidades_disponibles" nullable="false"/>
+            </basic>
+            <one-to-many name="alquileres" mapped-by="traje" fetch="LAZY"/>
+        </attributes>
+    </entity>
+
+    <!-- Destino: persiste nombre (PK). -->
+    <entity class="astroescape.Destino">
+        <table name="destinos"/>
+        <attributes>
+            <id name="nombre">
+                <column name="nombre" length="150"/>
+            </id>
+            <one-to-many name="viajes" mapped-by="destino" fetch="LAZY"/>
+            <one-to-many name="experiencias" mapped-by="destino" fetch="LAZY"/>
+        </attributes>
+    </entity>
+
+    <!-- Experiencia: PK compuesta nombre + destino. Persiste cuposRestantes. -->
+    <entity class="astroescape.Experiencia">
+        <table name="experiencias"/>
+        <id-class class="astroescape.persistencia.ExperienciaId"/>
+        <attributes>
+            <id name="nombre">
+                <column name="nombre" length="150"/>
+            </id>
+            <many-to-one name="destino" id="true" optional="false" fetch="EAGER">
+                <join-column name="destino_nombre" nullable="false"/>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-one>
+            <basic name="cuposRestantes">
+                <column name="cupos_restantes" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
+    <!-- Alquiler: PK id generada por MySQL. -->
+    <entity class="astroescape.Alquiler">
+        <table name="alquileres"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+                <column name="id"/>
+            </id>
+            <basic name="inicio">
+                <column name="inicio" nullable="false"/>
+            </basic>
+            <basic name="fin">
+                <column name="fin" nullable="false"/>
+            </basic>
+            <basic name="estado">
+                <column name="estado" length="20" nullable="false"/>
+            </basic>
+            <many-to-one name="cliente" optional="false" fetch="EAGER">
+                <join-column name="cliente_documento" nullable="false"/>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-one>
+            <many-to-one name="traje" optional="false" fetch="EAGER">
+                <join-column name="traje_codigo" nullable="false"/>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-one>
+        </attributes>
+    </entity>
+
+    <!-- Viaje: PK codigo. tipo distingue individual y grupal en la misma tabla. -->
+    <entity class="astroescape.Viaje">
+        <table name="viajes"/>
+        <inheritance strategy="SINGLE_TABLE"/>
+        <discriminator-column name="tipo" discriminator-type="STRING" length="20"/>
+        <attributes>
+            <id name="codigo">
+                <column name="codigo" length="50"/>
+            </id>
+            <basic name="salida">
+                <column name="salida" nullable="false"/>
+            </basic>
+            <many-to-one name="destino" optional="false" fetch="EAGER">
+                <join-column name="destino_nombre" nullable="false"/>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-one>
+            <many-to-many name="experiencias" fetch="LAZY">
+                <join-table name="viaje_experiencias">
+                    <join-column name="viaje_codigo" referenced-column-name="codigo"/>
+                    <inverse-join-column name="experiencia_nombre" referenced-column-name="nombre"/>
+                    <inverse-join-column name="destino_nombre" referenced-column-name="destino_nombre"/>
+                </join-table>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-many>
+        </attributes>
+    </entity>
+
+    <!-- ViajeIndividual: además persisten el cliente y el comprobante. -->
+    <entity class="astroescape.ViajeIndividual">
+        <discriminator-value>INDIVIDUAL</discriminator-value>
+        <attributes>
+            <basic name="comprobante">
+                <column name="comprobante" length="255"/>
+            </basic>
+            <many-to-one name="cliente" optional="false" fetch="EAGER">
+                <join-column name="cliente_documento"/>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-one>
+        </attributes>
+    </entity>
+
+    <!-- ViajeGrupal: además persisten cupo, integrantes y registroPago. -->
+    <entity class="astroescape.ViajeGrupal">
+        <discriminator-value>GRUPAL</discriminator-value>
+        <attributes>
+            <basic name="cupoMaximo">
+                <column name="cupo_maximo"/>
+            </basic>
+            <basic name="registroPago">
+                <column name="registro_pago" column-definition="TEXT"/>
+            </basic>
+            <many-to-many name="integrantes" fetch="LAZY">
+                <order-column name="orden"/>
+                <join-table name="viaje_integrantes">
+                    <join-column name="viaje_codigo" referenced-column-name="codigo"/>
+                    <inverse-join-column name="cliente_documento" referenced-column-name="documento"/>
+                </join-table>
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-many>
+        </attributes>
+    </entity>
+</entity-mappings>
