@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrajeEspacial {
-    private final String codigo;
-    private final String talla;
+    private String codigo;
+    private String talla;
     public int unidadesDisponibles;
 
     // Aquí hay una relación
-    private final List<Alquiler> alquileres = new ArrayList<>();
+    private List<Alquiler> alquileres = new ArrayList<>();
+
+    private TrajeEspacial() {
+    }
 
     public TrajeEspacial(String codigo, String talla, int unidadesDisponibles) {
         if (codigo == null || codigo.isBlank() || talla == null || talla.isBlank()) {

@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Viaje {
-    private final String codigo;
+    private String codigo;
 
     // Aquí hay una relación
-    private final Destino destino;
+    private Destino destino;
 
-    private final LocalDate salida;
+    private LocalDate salida;
 
     // Aquí hay una relación
-    private final List<Experiencia> experiencias = new ArrayList<>();
+    private List<Experiencia> experiencias = new ArrayList<>();
+
+    protected Viaje() {
+    }
 
     protected Viaje(String codigo, Destino destino, LocalDate salida) {
         if (codigo == null || codigo.isBlank()) {

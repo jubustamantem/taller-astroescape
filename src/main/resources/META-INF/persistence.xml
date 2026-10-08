@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
+    <persistence-unit name="astroescape" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <mapping-file>META-INF/orm.xml</mapping-file>
+        <class>astroescape.Cliente</class>
+        <class>astroescape.TrajeEspacial</class>
+        <class>astroescape.Destino</class>
+        <class>astroescape.Experiencia</class>
+        <class>astroescape.Alquiler</class>
+        <class>astroescape.Viaje</class>
+        <class>astroescape.ViajeIndividual</class>
+        <class>astroescape.ViajeGrupal</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    </persistence-unit>
+</persistence>

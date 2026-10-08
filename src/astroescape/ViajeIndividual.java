@@ -5,9 +5,12 @@ import java.time.LocalDate;
 // Aquí hay una relación
 public class ViajeIndividual extends Viaje {
     // Aquí hay una relación
-    private final Cliente cliente;
+    private Cliente cliente;
 
     private String comprobante;
+
+    private ViajeIndividual() {
+    }
 
     public ViajeIndividual(String codigo, Destino destino, LocalDate salida, Cliente cliente) {
         super(codigo, destino, salida);

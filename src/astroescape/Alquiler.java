@@ -3,12 +3,17 @@ package astroescape;
 import java.time.LocalDate;
 
 public class Alquiler {
+    private Long id;
+
     // Aquí hay una relación
-    private final Cliente cliente;
-    private final TrajeEspacial traje;
-    private final LocalDate inicio;
-    private final LocalDate fin;
+    private Cliente cliente;
+    private TrajeEspacial traje;
+    private LocalDate inicio;
+    private LocalDate fin;
     private String estado;
+
+    private Alquiler() {
+    }
 
     public Alquiler(Cliente cliente, TrajeEspacial traje, LocalDate inicio, LocalDate fin) {
         if (cliente == null || traje == null) {
@@ -30,6 +35,10 @@ public class Alquiler {
     public void confirmar() {
         traje.unidadesDisponibles = traje.unidadesDisponibles - 1;
         this.estado = "CONFIRMADO";
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Cliente getCliente() {

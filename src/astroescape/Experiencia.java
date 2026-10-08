@@ -1,12 +1,15 @@
 package astroescape;
 
 public class Experiencia {
-    private final String nombre;
+    private String nombre;
 
     // Aquí hay una relación
-    private final Destino destino;
+    private Destino destino;
 
     private int cuposRestantes;
+
+    private Experiencia() {
+    }
 
     public Experiencia(String nombre, Destino destino, int cuposRestantes) {
         if (nombre == null || nombre.isBlank()) {
