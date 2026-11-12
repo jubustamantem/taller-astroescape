@@ -25,3 +25,7 @@ El trabajo es en grupo. Cada grupo caracteriza **las dos clases que le asigne el
 2. **Principio de diseño que se rompe.** En una de las dos clases hay un método marcado con una pregunta. Respondan esa pregunta: qué principio de diseño no se está cuidando y cómo debería quedar el código.
 
 No hace falta corregir el código. La entrega es la caracterización de sus dos clases, de manera escrita.
+
+## Continuous Integration
+
+Automated Java and Python domain tests run on GitHub Actions. See [CI.md](CI.md) for how to run them locally and what the pipeline does.
