@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
-    private final String documento;
-    private final String nombre;
+    private String documento;
+    private String nombre;
 
     // Aquí hay una relación
-    private final List<Alquiler> alquileres = new ArrayList<>();
+    private List<Alquiler> alquileres = new ArrayList<>();
+
+    private Cliente() {
+    }
 
     public Cliente(String documento, String nombre) {
         if (documento == null || documento.isBlank() || nombre == null || nombre.isBlank()) {

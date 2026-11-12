@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Destino {
-    private final String nombre;
+    private String nombre;
 
     // Aquí hay una relación
-    private final List<Viaje> viajes = new ArrayList<>();
+    private List<Viaje> viajes = new ArrayList<>();
 
     // Aquí hay una relación
-    private final List<Experiencia> experiencias = new ArrayList<>();
+    private List<Experiencia> experiencias = new ArrayList<>();
+
+    private Destino() {
+    }
 
     public Destino(String nombre) {
         if (nombre == null || nombre.isBlank()) {

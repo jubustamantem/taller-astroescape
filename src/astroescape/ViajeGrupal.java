@@ -6,12 +6,15 @@ import java.util.List;
 
 // Aquí hay una relación
 public class ViajeGrupal extends Viaje {
-    private final int cupoMaximo;
+    private int cupoMaximo;
 
     // Aquí hay una relación
-    private final List<Cliente> integrantes = new ArrayList<>();
+    private List<Cliente> integrantes = new ArrayList<>();
 
     private String registroPago;
+
+    private ViajeGrupal() {
+    }
 
     public ViajeGrupal(String codigo, Destino destino, LocalDate salida, int cupoMaximo) {
         super(codigo, destino, salida);
